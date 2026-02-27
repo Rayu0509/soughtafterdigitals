@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sought After Digitals – Phase 4: Funnels, Sites & Reporting</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf5ff;
+    --blue: #1a4fa0;
+    --blue-bright: #2563eb;
+    --yellow: #f59e0b;
+    --yellow-dim: #b45309;
+    --green: #16a34a;
+    --green-bright: #22c55e;
+    --purple: #7c3aed;
+    --purple-bright: #a855f7;
+    --purple-light: rgba(124,58,237,0.1);
+    --white: #ffffff;
+    --gray: #64748b;
+    --dark: #1e293b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--dark); font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0;
+    background-image: linear-gradient(rgba(124,58,237,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(124,58,237,0.04) 1px, transparent 1px);
+    background-size: 60px 60px; animation: gridDrift 20s linear infinite;
+  }
+  @keyframes gridDrift { to { background-position: 60px 60px; } }
+  .bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.1; animation: orbFloat 8s ease-in-out infinite alternate; }
+  .orb-1 { width: 500px; height: 500px; background: var(--purple); top: -100px; left: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: var(--yellow); bottom: 20%; right: -100px; animation-delay: -3s; }
+  .orb-3 { width: 300px; height: 300px; background: var(--blue); bottom: -50px; left: 30%; animation-delay: -5s; }
+  @keyframes orbFloat { from { transform: translate(0,0); } to { transform: translate(30px,-40px); } }
+
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--purple), var(--yellow), var(--green)); z-index: 200; width: 0%; transition: width 0.1s; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 60px; background: rgba(250,245,255,0.92); backdrop-filter: blur(20px);
+    border-bottom: 2px solid rgba(124,58,237,0.2); box-shadow: 0 2px 20px rgba(124,58,237,0.08);
+    animation: slideDown 0.8s ease;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .nav-logo { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; }
+  .nav-logo span { color: var(--yellow); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--gray); text-decoration: none; font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--purple); }
+  .nav-phase-badge { background: linear-gradient(135deg, var(--purple), var(--purple-bright)); color: white; padding: 6px 16px; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; }
+
+  .hero { position: relative; z-index: 1; min-height: 70vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 140px 40px 60px; }
+  .hero-phase-num { font-size: 1rem; letter-spacing: 4px; color: var(--purple); text-transform: uppercase; font-weight: 700; margin-bottom: 16px; font-family: 'Poppins', sans-serif; animation: fadeUp 0.8s ease 0.2s both; }
+  .hero-icon { font-size: 4rem; margin-bottom: 20px; animation: fadeUp 0.8s ease 0.3s both; }
+  .hero-title { font-family: 'Poppins', sans-serif; font-size: clamp(2rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; color: var(--dark); margin-bottom: 16px; animation: fadeUp 0.8s ease 0.4s both; }
+  .hero-title .accent { color: var(--purple); }
+  .hero-sub { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; color: var(--gray); margin-bottom: 32px; animation: fadeUp 0.8s ease 0.6s both; }
+  .hero-jump { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.8s ease 0.8s both; }
+  .jump-btn { background: white; border: 1.5px solid rgba(124,58,237,0.25); color: var(--purple); padding: 10px 20px; border-radius: 6px; text-decoration: none; font-size: 0.78rem; font-weight: 600; letter-spacing: 1px; transition: all 0.3s; }
+  .jump-btn:hover { background: var(--purple); color: white; border-color: var(--purple); }
+  .hero-divider { width: 100px; height: 3px; background: linear-gradient(90deg, var(--purple), var(--yellow), var(--green)); margin: 48px auto 0; border-radius: 2px; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+  section { position: relative; z-index: 1; }
+  .section-wrap { max-width: 1100px; margin: 0 auto; padding: 80px 40px; }
+  .section-label { font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase; color: var(--purple); margin-bottom: 10px; font-weight: 700; }
+  .section-title { font-family: 'Poppins', sans-serif; font-size: clamp(1.6rem, 3.5vw, 2.5rem); font-weight: 700; color: var(--dark); margin-bottom: 12px; }
+  .section-title .accent { color: var(--yellow-dim); }
+  .section-desc { color: var(--gray); font-size: 0.95rem; line-height: 1.7; max-width: 680px; margin-bottom: 48px; }
+
+  /* VIDEO CARDS */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+  .video-card {
+    background: rgba(124,58,237,0.03); border: 1.5px solid rgba(124,58,237,0.15);
+    border-radius: 10px; padding: 28px; text-decoration: none; display: block;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .video-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--purple-bright); transform: scaleY(0); transition: transform 0.3s; transform-origin: bottom;
+  }
+  .video-card:hover { border-color: rgba(124,58,237,0.4); transform: translateX(4px); box-shadow: 0 6px 20px rgba(124,58,237,0.1); }
+  .video-card:hover::before { transform: scaleY(1); }
+  .video-card-label { font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--purple); font-weight: 700; margin-bottom: 10px; }
+  .video-card-title { color: var(--dark); font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; line-height: 1.4; }
+  .video-card-url { color: var(--gray); font-size: 0.72rem; word-break: break-all; font-family: monospace; }
+  .video-card-arrow { position: absolute; top: 28px; right: 28px; color: var(--purple); font-size: 1.2rem; transition: transform 0.3s; }
+  .video-card:hover .video-card-arrow { transform: translate(2px, -2px); }
+
+  .content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px; }
+  .content-card { background: white; border-radius: 12px; padding: 28px; border: 1.5px solid rgba(124,58,237,0.12); box-shadow: 0 2px 12px rgba(124,58,237,0.05); transition: all 0.3s; }
+  .content-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(124,58,237,0.12); border-color: var(--purple-bright); }
+  .content-card-icon { font-size: 2rem; margin-bottom: 14px; }
+  .content-card-title { font-weight: 700; font-size: 1rem; color: var(--dark); margin-bottom: 10px; }
+  .content-card-body { color: var(--gray); font-size: 0.88rem; line-height: 1.65; }
+  .content-card-body ul { list-style: none; }
+  .content-card-body ul li { padding: 5px 0; border-bottom: 1px solid rgba(124,58,237,0.07); display: flex; gap: 8px; }
+  .content-card-body ul li::before { content: '✓'; color: var(--purple); font-weight: 700; flex-shrink: 0; }
+
+  .step-list { list-style: none; }
+  .step-item { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid rgba(124,58,237,0.08); }
+  .step-num { width: 36px; height: 36px; background: linear-gradient(135deg, var(--purple), var(--purple-bright)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; font-family: 'Poppins', sans-serif; }
+  .step-content-title { font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+  .step-content-text { color: var(--gray); font-size: 0.88rem; line-height: 1.6; }
+
+  .tip-box { background: rgba(22,163,74,0.07); border: 1.5px solid rgba(22,163,74,0.25); border-radius: 10px; padding: 20px 24px; margin: 24px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .tip-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .tip-text { color: var(--dark); font-size: 0.88rem; line-height: 1.6; }
+  .tip-text strong { color: var(--green); }
+
+  /* FUNNEL VISUAL */
+  .funnel-visual { margin: 32px 0; display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .funnel-step { background: white; border: 1.5px solid rgba(124,58,237,0.15); border-radius: 10px; padding: 18px 24px; width: 100%; max-width: 550px; display: flex; align-items: center; gap: 14px; margin-bottom: 4px; transition: all 0.3s; }
+  .funnel-step:hover { border-color: var(--purple); transform: translateX(4px); }
+  .funnel-step-num { width: 32px; height: 32px; background: linear-gradient(135deg, var(--purple), var(--purple-bright)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem; flex-shrink: 0; }
+  .funnel-step-name { font-weight: 700; color: var(--dark); font-size: 0.95rem; }
+  .funnel-step-desc { color: var(--gray); font-size: 0.8rem; }
+  .funnel-arrow-down { color: var(--purple); font-size: 1.2rem; text-align: center; padding: 2px 0; }
+
+  /* STATS GRID */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 40px; }
+  .stat-card { background: white; border-radius: 12px; padding: 24px; border: 1.5px solid rgba(124,58,237,0.12); text-align: center; }
+  .stat-num { font-family: 'Poppins', sans-serif; font-size: 2rem; font-weight: 900; color: var(--purple); }
+  .stat-label { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); margin-top: 6px; font-weight: 600; }
+
+  .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(124,58,237,0.2), transparent); max-width: 800px; margin: 0 auto; }
+
+  /* QUIZ */
+  .quiz-container { background: white; border-radius: 16px; padding: 48px; border: 2px solid rgba(124,58,237,0.2); box-shadow: 0 4px 24px rgba(124,58,237,0.08); }
+  .quiz-progress-bar-wrap { background: rgba(124,58,237,0.1); border-radius: 100px; height: 6px; margin-bottom: 32px; }
+  .quiz-progress-fill { height: 6px; background: linear-gradient(90deg, var(--purple), var(--yellow)); border-radius: 100px; transition: width 0.5s ease; }
+  .quiz-q-num { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--purple); font-weight: 700; margin-bottom: 10px; }
+  .quiz-question { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--dark); margin-bottom: 28px; line-height: 1.4; }
+  .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+  .quiz-option { background: var(--bg); border: 2px solid rgba(124,58,237,0.15); border-radius: 10px; padding: 16px 20px; cursor: pointer; font-size: 0.92rem; color: var(--dark); font-weight: 500; transition: all 0.25s; display: flex; align-items: center; gap: 12px; }
+  .quiz-option:hover { border-color: var(--purple); background: rgba(124,58,237,0.04); }
+  .quiz-option.correct { border-color: var(--green); background: rgba(22,163,74,0.08); }
+  .quiz-option.wrong { border-color: #ef4444; background: rgba(239,68,68,0.06); }
+  .quiz-option-letter { width: 28px; height: 28px; border-radius: 50%; background: rgba(124,58,237,0.12); color: var(--purple); font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; transition: all 0.25s; }
+  .quiz-option.correct .quiz-option-letter { background: var(--green); color: white; }
+  .quiz-option.wrong .quiz-option-letter { background: #ef4444; color: white; }
+  .quiz-feedback { margin-top: 16px; padding: 14px 18px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct-fb { background: rgba(22,163,74,0.1); color: var(--green); border: 1px solid rgba(22,163,74,0.3); }
+  .quiz-feedback.wrong-fb { background: rgba(239,68,68,0.08); color: #dc2626; border: 1px solid rgba(239,68,68,0.25); }
+  .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; }
+  .quiz-btn { background: linear-gradient(135deg, var(--purple), var(--purple-bright)); color: white; border: none; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; transition: all 0.3s; }
+  .quiz-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .quiz-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .quiz-score-display { font-size: 0.85rem; color: var(--gray); font-weight: 600; }
+  .quiz-results { text-align: center; padding: 20px 0; }
+  .quiz-results-score { font-family: 'Poppins', sans-serif; font-size: 4rem; font-weight: 900; color: var(--purple); line-height: 1; margin-bottom: 10px; }
+  .quiz-results-label { font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gray); margin-bottom: 20px; }
+  .quiz-results-msg { font-size: 1.1rem; color: var(--dark); margin-bottom: 28px; line-height: 1.5; }
+  .quiz-retry-btn { background: white; border: 2px solid var(--purple); color: var(--purple); padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: all 0.3s; margin-right: 12px; }
+  .quiz-retry-btn:hover { background: var(--purple); color: white; }
+  .quiz-complete-btn { background: linear-gradient(135deg, var(--yellow-dim), var(--yellow)); color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.85rem; display: inline-block; transition: all 0.3s; }
+  .quiz-complete-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+  /* COMPLETION BANNER */
+  .completion-banner { background: linear-gradient(135deg, var(--blue), var(--purple)); border-radius: 16px; padding: 48px; text-align: center; margin-top: 60px; color: white; }
+  .completion-icon { font-size: 3rem; margin-bottom: 16px; }
+  .completion-title { font-family: 'Poppins', sans-serif; font-size: 2rem; font-weight: 900; margin-bottom: 12px; }
+  .completion-sub { font-size: 1rem; opacity: 0.85; line-height: 1.6; max-width: 500px; margin: 0 auto 28px; }
+  .completion-btn { background: white; color: var(--purple); padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 0.9rem; letter-spacing: 1px; display: inline-block; transition: all 0.3s; }
+  .completion-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  footer { position: relative; z-index: 1; text-align: center; padding: 60px 40px; background: var(--dark); color: white; }
+  .footer-logo { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--yellow); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .footer-sub { color: var(--gray); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .footer-line { width: 80px; height: 2px; background: linear-gradient(90deg, var(--blue), var(--yellow), var(--green)); margin: 0 auto 20px; border-radius: 2px; }
+  .footer-copy { color: #475569; font-size: 0.72rem; }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .section-wrap { padding: 60px 24px; }
+    .content-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2,1fr); }
+    .quiz-container { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+<div id="progressBar" class="progress-bar"></div>
+<div class="bg-grid"></div>
+<div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+<nav>
+  <div class="nav-logo">Sought After <span>Digitals</span></div>
+  <ul class="nav-links">
+    <li><a href="ghl-index.html">← All Phases</a></li>
+    <li><a href="#funnels">Funnels</a></li>
+    <li><a href="#sites">Sites</a></li>
+    <li><a href="#reporting">Reporting</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+  <span class="nav-phase-badge">Phase 04</span>
+</nav>
+
+<section class="hero">
+  <div class="hero-phase-num">Phase 04 — Advanced Tools</div>
+  <div class="hero-icon">🏆</div>
+  <h1 class="hero-title">Funnels, Sites &amp; <span class="accent">Reporting</span></h1>
+  <p class="hero-sub">Build high-converting funnels, professional websites, and track your results</p>
+  <div class="hero-jump">
+    <a href="#funnels" class="jump-btn">Funnel Builder</a>
+    <a href="#sites" class="jump-btn">Website Builder</a>
+    <a href="#forms" class="jump-btn">Forms & Calendars</a>
+    <a href="#reporting" class="jump-btn">Reporting</a>
+    <a href="#quiz" class="jump-btn">📝 Final Quiz</a>
+  </div>
+  <div class="hero-divider"></div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FUNNELS -->
+<section id="funnels">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 4 · Lesson 1</p>
+      <h2 class="section-title">Funnel <span class="accent">Builder</span></h2>
+      <p class="section-desc">A funnel guides visitors through a specific path — from landing page to thank you page. Each step has one job and one goal.</p>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.1s">
+      <p class="section-label" style="margin-bottom:16px;">📹 Training Videos</p>
+      <div class="video-grid">
+        <a href="https://youtu.be/VIDEO_ID_HERE_8" target="_blank" class="video-card">
+          <div class="video-card-label">Video 8 — Funnel Builder</div>
+          <div class="video-card-title">Build Your First GoHighLevel Funnel — Step by Step</div>
+          <div class="video-card-url">youtu.be/VIDEO_ID_HERE_8</div>
+          <div class="video-card-arrow">▶</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.15s">
+      <h3 style="font-family:'Cinzel',serif; margin-bottom:20px; color:var(--dark);">A Simple Lead Generation Funnel</h3>
+      <div class="funnel-visual">
+        <div class="funnel-step"><div class="funnel-step-num">1</div><div><div class="funnel-step-name">🎯 Landing Page</div><div class="funnel-step-desc">Visitor sees your offer — headline, benefits, CTA button</div></div></div>
+        <div class="funnel-arrow-down">↓</div>
+        <div class="funnel-step"><div class="funnel-step-num">2</div><div><div class="funnel-step-name">📋 Opt-In / Form Page</div><div class="funnel-step-desc">Visitor enters name, email, phone to claim the offer</div></div></div>
+        <div class="funnel-arrow-down">↓</div>
+        <div class="funnel-step"><div class="funnel-step-num">3</div><div><div class="funnel-step-name">✅ Thank You Page</div><div class="funnel-step-desc">Confirms success, next steps, maybe upsell or booking link</div></div></div>
+        <div class="funnel-arrow-down">↓</div>
+        <div class="funnel-step"><div class="funnel-step-num">4</div><div><div class="funnel-step-name">⚡ Automation Triggers</div><div class="funnel-step-desc">Workflow fires — sends SMS, adds to CRM, books appointment</div></div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;">
+      <ul class="step-list reveal" style="transition-delay:0.2s">
+        <li class="step-item">
+          <div class="step-num">1</div>
+          <div>
+            <div class="step-content-title">Creating a New Funnel</div>
+            <div class="step-content-text">Go to Sites → Funnels → + New Funnel. Name it, add steps (pages), and choose a template or start blank. Each step is a separate page in the funnel.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">2</div>
+          <div>
+            <div class="step-content-title">Using the Page Builder</div>
+            <div class="step-content-text">Drag and drop elements: headlines, images, buttons, countdown timers, videos, testimonials, and forms. Every element is customizable — fonts, colors, sizes, padding.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">3</div>
+          <div>
+            <div class="step-content-title">Connecting Forms to CRM</div>
+            <div class="step-content-text">When you add a form to your funnel, every submission automatically creates a contact in GHL and can trigger a workflow. This is the magic connection between your funnel and automation.</div>
+          </div>
+        </li>
+        <li class="step-item">
+          <div class="step-num">4</div>
+          <div>
+            <div class="step-content-title">Publishing Your Funnel</div>
+            <div class="step-content-text">Click Publish on each page. You can use the GHL subdomain (yourbusiness.funnel.site) or connect your custom domain for a professional look.</div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div class="tip-box reveal">
+      <div class="tip-icon">🎯</div>
+      <div class="tip-text"><strong>Conversion Tip:</strong> A great landing page has ONE goal. Remove navigation menus, social media links, and anything else that distracts the visitor from the single action you want them to take.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- WEBSITES -->
+<section id="sites">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 4 · Lesson 2</p>
+      <h2 class="section-title">Website <span class="accent">Builder</span></h2>
+      <p class="section-desc">Unlike funnels (which have one goal per page), GHL websites have full navigation and multiple pages — great for businesses that need an online presence.</p>
+    </div>
+
+    <div class="content-grid reveal" style="transition-delay:0.1s">
+      <div class="content-card">
+        <div class="content-card-icon">🌐</div>
+        <div class="content-card-title">Websites vs Funnels</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Websites: Multiple pages, navigation menu, full brand experience</li>
+            <li>Funnels: Single-purpose, no nav, focused conversion</li>
+            <li>Use both together for best results</li>
+            <li>Website builds trust; funnel converts</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-icon">📝</div>
+        <div class="content-card-title">Blog Setup</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Create blog posts in Sites → Blog</li>
+            <li>Add categories and featured images</li>
+            <li>Great for SEO content marketing</li>
+            <li>Each post auto-gets its own URL</li>
+            <li>Can be linked to your main website</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-icon">🎨</div>
+        <div class="content-card-title">Templates & Design</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Choose from 100+ free templates</li>
+            <li>Customize colors, fonts, and layout</li>
+            <li>Mobile-responsive by default</li>
+            <li>Add custom CSS for advanced styling</li>
+            <li>Save custom sections as reusable blocks</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FORMS & CALENDARS -->
+<section id="forms">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 4 · Lesson 3</p>
+      <h2 class="section-title">Forms, Surveys &amp; <span class="accent">Calendars</span></h2>
+      <p class="section-desc">Capture leads with forms, gather detailed info with surveys, and let clients book themselves with GHL's calendar system.</p>
+    </div>
+
+    <div class="reveal" style="transition-delay:0.1s">
+      <p class="section-label" style="margin-bottom:16px;">📹 Training Videos</p>
+      <div class="video-grid">
+        <a href="https://youtu.be/VIDEO_ID_HERE_9" target="_blank" class="video-card">
+          <div class="video-card-label">Video 9 — Calendar & Booking</div>
+          <div class="video-card-title">GHL Calendar & Appointment Booking Setup</div>
+          <div class="video-card-url">youtu.be/VIDEO_ID_HERE_9</div>
+          <div class="video-card-arrow">▶</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="content-grid reveal" style="transition-delay:0.15s">
+      <div class="content-card">
+        <div class="content-card-icon">📋</div>
+        <div class="content-card-title">Forms</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Build in Sites → Forms</li>
+            <li>Drag & drop field builder</li>
+            <li>Field types: text, dropdown, checkbox, file upload</li>
+            <li>Embed in funnels or websites</li>
+            <li>Auto-creates contacts on submission</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-icon">📊</div>
+        <div class="content-card-title">Surveys</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Multi-step questionnaires</li>
+            <li>Great for onboarding clients</li>
+            <li>Conditional logic (show/hide questions)</li>
+            <li>Responses saved to contact record</li>
+            <li>Can trigger workflows based on answers</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-icon">📅</div>
+        <div class="content-card-title">Calendars</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Set up appointment types and durations</li>
+            <li>Connect Google Calendar for availability sync</li>
+            <li>Set buffer time between appointments</li>
+            <li>Embed booking page in funnels/websites</li>
+            <li>Auto-send confirmations and reminders</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- REPORTING -->
+<section id="reporting">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 4 · Lesson 4</p>
+      <h2 class="section-title">Reporting &amp; <span class="accent">Analytics</span></h2>
+      <p class="section-desc">Data tells you what's working and what's not. GHL's reporting gives you the numbers you need to make smart business decisions.</p>
+    </div>
+
+    <div class="stats-grid reveal" style="transition-delay:0.1s">
+      <div class="stat-card"><div class="stat-num">📊</div><div class="stat-label">Pipeline Reports</div></div>
+      <div class="stat-card"><div class="stat-num">💰</div><div class="stat-label">Revenue Tracking</div></div>
+      <div class="stat-card"><div class="stat-num">📱</div><div class="stat-label">SMS/Email Stats</div></div>
+      <div class="stat-card"><div class="stat-num">⭐</div><div class="stat-label">Review Reports</div></div>
+      <div class="stat-card"><div class="stat-num">📈</div><div class="stat-label">Ads Attribution</div></div>
+      <div class="stat-card"><div class="stat-num">👥</div><div class="stat-label">Agent Reporting</div></div>
+    </div>
+
+    <ul class="step-list reveal" style="transition-delay:0.15s">
+      <li class="step-item">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-content-title">Dashboard Overview</div>
+          <div class="step-content-text">The main dashboard shows new leads, appointments booked, revenue, and open conversations at a glance. Customize it to show the metrics most important to your business.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-content-title">Opportunity & Pipeline Report</div>
+          <div class="step-content-text">See how many opportunities are in each pipeline stage, your conversion rate between stages, and your total pipeline value. Identify where deals are getting stuck.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-content-title">Email & SMS Campaign Stats</div>
+          <div class="step-content-text">Track open rates, click rates, reply rates, and unsubscribes for all your campaigns. A healthy email open rate is 20-30%. SMS open rates should be 90%+.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-content-title">Attribution Reporting</div>
+          <div class="step-content-text">If you run paid ads, GHL's attribution tracking shows you which ad source generated each lead and closed deal — so you know exactly where your best ROI comes from.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">5</div>
+        <div>
+          <div class="step-content-title">Reputation Management</div>
+          <div class="step-content-text">Track your Google and Facebook reviews in one place. Use GHL's review request automation (Phase 3!) to grow your review count and respond to all reviews from within GHL.</div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="tip-box reveal">
+      <div class="tip-icon">📈</div>
+      <div class="tip-text"><strong>Pro Tip:</strong> Review your pipeline and email reports every Monday morning. Spend 15 minutes identifying any stuck leads, low-performing campaigns, or missed follow-ups from the week before.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 4 · Final Knowledge Check</p>
+      <h2 class="section-title">Phase 4 — <span class="accent">Final Quiz</span></h2>
+      <p class="section-desc">This is your final quiz. Pass with 70% or higher to complete the GoHighLevel training program!</p>
+    </div>
+
+    <div class="quiz-container reveal" style="transition-delay:0.1s">
+      <div class="quiz-progress-bar-wrap">
+        <div class="quiz-progress-fill" id="quizProgress" style="width:0%"></div>
+      </div>
+      <div id="quizBody"></div>
+    </div>
+
+    <!-- COMPLETION BANNER -->
+    <div class="completion-banner reveal" style="transition-delay:0.2s" id="completionBanner" style="display:none">
+      <div class="completion-icon">🏆</div>
+      <div class="completion-title">Training Complete!</div>
+      <div class="completion-sub">You've completed all 4 phases of the Sought After Digitals GoHighLevel Training. You're ready to start building, automating, and growing!</div>
+      <a href="ghl-index.html" class="completion-btn">← Back to All Phases</a>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<footer>
+  <div class="footer-logo">Sought After Digitals</div>
+  <div class="footer-sub">Phase 4 — Funnels, Sites & Reporting</div>
+  <div class="footer-line"></div>
+  <div class="footer-copy">© 2025 Sought After Digitals. All rights reserved. | GoHighLevel Training</div>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY, d = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progressBar').style.width = (s/d*100) + '%';
+  });
+
+  const questions = [
+    { q: "What is the main difference between a Funnel and a Website in GHL?", options: ["Funnels cost more to create", "Websites have full navigation; funnels focus on one goal per page", "Funnels can only be used for ecommerce", "Websites cannot capture leads"], answer: 1, explanation: "Websites have full navigation and multiple pages for a complete brand experience. Funnels are focused, single-purpose paths designed to convert visitors with no distractions." },
+    { q: "In a basic lead generation funnel, what typically comes AFTER the opt-in form page?", options: ["A pricing page", "A thank you page", "A login page", "The home page"], answer: 1, explanation: "After the opt-in page (where the visitor submits their info), they're taken to a Thank You page that confirms success and provides next steps." },
+    { q: "What happens automatically when someone submits a GHL form?", options: ["Nothing — you have to manually enter the contact", "A contact is created in GHL and a workflow can trigger", "The form is emailed to you as a PDF", "The visitor is added to Facebook automatically"], answer: 1, explanation: "Form submissions automatically create or update a contact in GHL and can trigger workflows — this is the key connection between your funnel and automation system." },
+    { q: "What type of GHL report shows you where deals are getting stuck in your sales process?", options: ["Email Campaign Report", "Pipeline & Opportunity Report", "SMS Statistics Report", "Review Management Report"], answer: 1, explanation: "The Pipeline & Opportunity Report shows deals in each stage, conversion rates between stages, and total pipeline value — helping you identify bottlenecks." },
+    { q: "What is a healthy SMS open rate for a business?", options: ["10-20%", "30-50%", "90% or higher", "60-70%"], answer: 2, explanation: "SMS messages have an incredibly high open rate — typically 90% or higher. This is why SMS is one of the most powerful channels in GHL for reaching contacts quickly." },
+    { q: "Where do you go in GHL to build a booking calendar?", options: ["Automation → Workflows", "Settings → Calendar", "Contacts → Appointments", "Go to Settings or the Calendar section under the sidebar"], answer: 3, explanation: "GHL's calendar setup is accessed through the Calendar section. You set availability, appointment types, connect Google Calendar for sync, and get an embeddable booking link." },
+    { q: "What does GHL's Attribution Reporting tell you?", options: ["How many words are in your emails", "Which ad sources generate leads that actually convert into paying clients", "Your contact's social media followers", "The geographic location of all your leads"], answer: 1, explanation: "Attribution reporting tracks which ad or source generated each lead — and whether they eventually became a client. This helps you know where to invest your marketing budget." },
+  ];
+
+  let current = 0, score = 0, answered = false;
+
+  function renderQuestion() {
+    const q = questions[current];
+    document.getElementById('quizProgress').style.width = (current / questions.length * 100) + '%';
+    const letters = ['A','B','C','D'];
+    document.getElementById('quizBody').innerHTML = `
+      <div class="quiz-q-num">Question ${current+1} of ${questions.length}</div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">${q.options.map((o,i) => `<div class="quiz-option" onclick="selectOption(${i})" id="opt${i}"><div class="quiz-option-letter">${letters[i]}</div>${o}</div>`).join('')}</div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div class="quiz-nav"><div class="quiz-score-display">Score: ${score}/${current}</div><button class="quiz-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button></div>`;
+    answered = false;
+  }
+
+  function selectOption(idx) {
+    if (answered) return; answered = true;
+    const q = questions[current];
+    document.querySelectorAll('.quiz-option')[idx].classList.add(idx === q.answer ? 'correct' : 'wrong');
+    if (idx !== q.answer) document.querySelectorAll('.quiz-option')[q.answer].classList.add('correct');
+    if (idx === q.answer) score++;
+    const fb = document.getElementById('quizFeedback');
+    fb.textContent = (idx === q.answer ? '✅ Correct! ' : '❌ Not quite. ') + q.explanation;
+    fb.className = 'quiz-feedback ' + (idx === q.answer ? 'correct-fb' : 'wrong-fb') + ' show';
+    document.getElementById('nextBtn').disabled = false;
+  }
+
+  function nextQuestion() {
+    current++;
+    if (current < questions.length) renderQuestion();
+    else {
+      document.getElementById('quizProgress').style.width = '100%';
+      const pct = Math.round(score/questions.length*100);
+      const passed = pct >= 70;
+      document.getElementById('quizBody').innerHTML = `
+        <div class="quiz-results">
+          <div class="quiz-results-score">${score}/${questions.length}</div>
+          <div class="quiz-results-label">${pct}% — ${passed?'🏆 Training Complete!':'Keep Practicing'}</div>
+          <div class="quiz-results-msg">${passed
+            ? `Incredible! You've completed all of Phase 4 and the entire GoHighLevel training program. You are now ready to build, automate, and grow with GHL! 🚀`
+            : `Review the material above and try again. You need at least 70% to pass and complete the training.`
+          }</div>
+          <button class="quiz-retry-btn" onclick="retryQuiz()">↩ Retry Quiz</button>
+          ${passed?`<a href="ghl-index.html" class="quiz-complete-btn">🏠 Back to All Phases</a>`:''}
+        </div>`;
+      if (passed) {
+        document.getElementById('completionBanner').style.display = 'block';
+      }
+    }
+  }
+
+  function retryQuiz() { current = 0; score = 0; answered = false; renderQuestion(); }
+  renderQuestion();
+
+  document.querySelectorAll('.reveal').forEach(el => {
+    new IntersectionObserver((e) => { if(e[0].isIntersecting) el.classList.add('visible'); }, {threshold: 0.08}).observe(el);
+  });
+</script>
+</body>
+</html>

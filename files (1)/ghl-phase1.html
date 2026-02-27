@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sought After Digitals – Phase 1: GHL Setup & Navigation</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8faff;
+    --blue: #1a4fa0;
+    --blue-bright: #2563eb;
+    --blue-light: #60a5fa;
+    --yellow: #f59e0b;
+    --yellow-light: #fcd34d;
+    --yellow-dim: #b45309;
+    --green: #16a34a;
+    --green-light: #4ade80;
+    --white: #ffffff;
+    --gray: #64748b;
+    --dark: #1e293b;
+    --phase-color: #2563eb;
+    --phase-light: rgba(37,99,235,0.1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--dark); font-family: 'Poppins', sans-serif; overflow-x: hidden; }
+
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0;
+    background-image: linear-gradient(rgba(37,99,235,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.04) 1px, transparent 1px);
+    background-size: 60px 60px; animation: gridDrift 20s linear infinite;
+  }
+  @keyframes gridDrift { to { background-position: 60px 60px; } }
+  .bg-orbs { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.1; animation: orbFloat 8s ease-in-out infinite alternate; }
+  .orb-1 { width: 500px; height: 500px; background: var(--blue); top: -100px; left: -100px; }
+  .orb-2 { width: 400px; height: 400px; background: var(--yellow); bottom: 20%; right: -100px; animation-delay: -3s; }
+  .orb-3 { width: 300px; height: 300px; background: var(--green); bottom: -50px; left: 30%; animation-delay: -5s; }
+  @keyframes orbFloat { from { transform: translate(0,0); } to { transform: translate(30px,-40px); } }
+
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--blue), var(--yellow), var(--green)); z-index: 200; width: 0%; transition: width 0.1s; }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 60px; background: rgba(255,255,255,0.92); backdrop-filter: blur(20px);
+    border-bottom: 2px solid var(--blue-light); box-shadow: 0 2px 20px rgba(37,99,235,0.1);
+    animation: slideDown 0.8s ease;
+  }
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .nav-logo { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 2px; color: var(--blue); text-transform: uppercase; }
+  .nav-logo span { color: var(--yellow); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { color: var(--gray); text-decoration: none; font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-phase-badge { background: linear-gradient(135deg, var(--blue), var(--blue-bright)); color: white; padding: 6px 16px; border-radius: 100px; font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; }
+
+  /* HERO */
+  .hero {
+    position: relative; z-index: 1; min-height: 70vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 140px 40px 60px;
+  }
+  .hero-phase-num { font-family: 'Poppins', sans-serif; font-size: 1rem; letter-spacing: 4px; color: var(--blue); text-transform: uppercase; font-weight: 700; margin-bottom: 16px; animation: fadeUp 0.8s ease 0.2s both; }
+  .hero-icon { font-size: 4rem; margin-bottom: 20px; animation: fadeUp 0.8s ease 0.3s both; }
+  .hero-title { font-family: 'Poppins', sans-serif; font-size: clamp(2rem, 5vw, 4.5rem); font-weight: 900; line-height: 1.05; color: var(--dark); margin-bottom: 16px; animation: fadeUp 0.8s ease 0.4s both; }
+  .hero-title .accent { color: var(--blue); }
+  .hero-sub { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; color: var(--gray); margin-bottom: 32px; animation: fadeUp 0.8s ease 0.6s both; }
+  .hero-jump { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; animation: fadeUp 0.8s ease 0.8s both; }
+  .jump-btn { background: white; border: 1.5px solid rgba(37,99,235,0.2); color: var(--blue); padding: 10px 20px; border-radius: 6px; text-decoration: none; font-size: 0.78rem; font-weight: 600; letter-spacing: 1px; transition: all 0.3s; }
+  .jump-btn:hover { background: var(--blue); color: white; border-color: var(--blue); }
+  .hero-divider { width: 100px; height: 3px; background: linear-gradient(90deg, var(--blue), var(--yellow), var(--green)); margin: 48px auto 0; border-radius: 2px; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* SECTIONS */
+  section { position: relative; z-index: 1; }
+  .section-wrap { max-width: 1100px; margin: 0 auto; padding: 80px 40px; }
+  .section-label { font-size: 0.65rem; letter-spacing: 4px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; font-weight: 700; }
+  .section-title { font-family: 'Poppins', sans-serif; font-size: clamp(1.6rem, 3.5vw, 2.5rem); font-weight: 700; color: var(--dark); margin-bottom: 12px; }
+  .section-title .accent { color: var(--yellow); }
+  .section-desc { color: var(--gray); font-size: 0.95rem; line-height: 1.7; max-width: 680px; margin-bottom: 48px; }
+
+  /* VIDEO CARDS */
+  .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 40px; }
+  .video-card {
+    background: rgba(37,99,235,0.03); border: 1.5px solid rgba(37,99,235,0.15);
+    border-radius: 10px; padding: 28px; text-decoration: none; display: block;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .video-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--blue-bright); transform: scaleY(0); transition: transform 0.3s; transform-origin: bottom;
+  }
+  .video-card:hover { border-color: rgba(37,99,235,0.4); transform: translateX(4px); box-shadow: 0 6px 20px rgba(37,99,235,0.1); }
+  .video-card:hover::before { transform: scaleY(1); }
+  .video-card-label { font-size: 0.62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); font-weight: 700; margin-bottom: 10px; }
+  .video-card-title { color: var(--dark); font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; line-height: 1.4; }
+  .video-card-url { color: var(--gray); font-size: 0.72rem; word-break: break-all; font-family: monospace; }
+  .video-card-arrow { position: absolute; top: 28px; right: 28px; color: var(--blue); font-size: 1.2rem; transition: transform 0.3s; }
+  .video-card:hover .video-card-arrow { transform: translate(2px, -2px); }
+
+  /* CONTENT CARDS */
+  .content-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-bottom: 40px; }
+  .content-card {
+    background: white; border-radius: 12px; padding: 28px;
+    border: 1.5px solid rgba(37,99,235,0.12); box-shadow: 0 2px 12px rgba(37,99,235,0.05);
+    transition: all 0.3s;
+  }
+  .content-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(37,99,235,0.12); border-color: var(--blue-light); }
+  .content-card-icon { font-size: 2rem; margin-bottom: 14px; }
+  .content-card-title { font-weight: 700; font-size: 1rem; color: var(--dark); margin-bottom: 10px; }
+  .content-card-body { color: var(--gray); font-size: 0.88rem; line-height: 1.65; }
+  .content-card-body ul { padding-left: 0; list-style: none; }
+  .content-card-body ul li { padding: 5px 0; border-bottom: 1px solid rgba(37,99,235,0.07); display: flex; gap: 8px; }
+  .content-card-body ul li::before { content: '✓'; color: var(--green); font-weight: 700; flex-shrink: 0; }
+
+  /* STEP LIST */
+  .step-list { list-style: none; }
+  .step-item { display: flex; gap: 20px; padding: 24px 0; border-bottom: 1px solid rgba(37,99,235,0.08); }
+  .step-num { width: 36px; height: 36px; background: linear-gradient(135deg, var(--blue), var(--blue-bright)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; font-family: 'Poppins', sans-serif; }
+  .step-content-title { font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+  .step-content-text { color: var(--gray); font-size: 0.88rem; line-height: 1.6; }
+
+  /* TIP BOX */
+  .tip-box { background: rgba(22,163,74,0.07); border: 1.5px solid rgba(22,163,74,0.25); border-radius: 10px; padding: 20px 24px; margin: 24px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .tip-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .tip-text { color: var(--dark); font-size: 0.88rem; line-height: 1.6; }
+  .tip-text strong { color: var(--green); }
+
+  /* WARNING BOX */
+  .warn-box { background: rgba(245,158,11,0.07); border: 1.5px solid rgba(245,158,11,0.3); border-radius: 10px; padding: 20px 24px; margin: 24px 0; display: flex; gap: 14px; align-items: flex-start; }
+  .warn-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .warn-text { color: var(--dark); font-size: 0.88rem; line-height: 1.6; }
+  .warn-text strong { color: var(--yellow-dim); }
+
+  /* DIVIDER */
+  .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(37,99,235,0.15), transparent); max-width: 800px; margin: 0 auto; }
+
+  /* QUIZ */
+  .quiz-container { background: white; border-radius: 16px; padding: 48px; border: 2px solid rgba(37,99,235,0.15); box-shadow: 0 4px 24px rgba(37,99,235,0.08); }
+  .quiz-progress-bar-wrap { background: rgba(37,99,235,0.1); border-radius: 100px; height: 6px; margin-bottom: 32px; }
+  .quiz-progress-fill { height: 6px; background: linear-gradient(90deg, var(--blue), var(--green)); border-radius: 100px; transition: width 0.5s ease; }
+  .quiz-q-num { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); font-weight: 700; margin-bottom: 10px; }
+  .quiz-question { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--dark); margin-bottom: 28px; line-height: 1.4; }
+  .quiz-options { display: flex; flex-direction: column; gap: 12px; }
+  .quiz-option {
+    background: var(--bg); border: 2px solid rgba(37,99,235,0.15);
+    border-radius: 10px; padding: 16px 20px; cursor: pointer;
+    font-size: 0.92rem; color: var(--dark); font-weight: 500;
+    transition: all 0.25s; display: flex; align-items: center; gap: 12px;
+  }
+  .quiz-option:hover { border-color: var(--blue); background: rgba(37,99,235,0.04); }
+  .quiz-option.selected { border-color: var(--blue); background: rgba(37,99,235,0.08); }
+  .quiz-option.correct { border-color: var(--green); background: rgba(22,163,74,0.08); color: var(--dark); }
+  .quiz-option.wrong { border-color: #ef4444; background: rgba(239,68,68,0.06); color: var(--dark); }
+  .quiz-option-letter { width: 28px; height: 28px; border-radius: 50%; background: rgba(37,99,235,0.1); color: var(--blue); font-weight: 800; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; transition: all 0.25s; }
+  .quiz-option.selected .quiz-option-letter { background: var(--blue); color: white; }
+  .quiz-option.correct .quiz-option-letter { background: var(--green); color: white; }
+  .quiz-option.wrong .quiz-option-letter { background: #ef4444; color: white; }
+  .quiz-feedback { margin-top: 16px; padding: 14px 18px; border-radius: 8px; font-size: 0.88rem; font-weight: 600; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct-fb { background: rgba(22,163,74,0.1); color: var(--green); border: 1px solid rgba(22,163,74,0.3); }
+  .quiz-feedback.wrong-fb { background: rgba(239,68,68,0.08); color: #dc2626; border: 1px solid rgba(239,68,68,0.25); }
+  .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; }
+  .quiz-btn { background: linear-gradient(135deg, var(--blue), var(--blue-bright)); color: white; border: none; padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; transition: all 0.3s; }
+  .quiz-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+  .quiz-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .quiz-score-display { font-size: 0.85rem; color: var(--gray); font-weight: 600; }
+  .quiz-results { text-align: center; padding: 20px 0; }
+  .quiz-results-score { font-family: 'Poppins', sans-serif; font-size: 4rem; font-weight: 900; color: var(--blue); line-height: 1; margin-bottom: 10px; }
+  .quiz-results-label { font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gray); margin-bottom: 20px; }
+  .quiz-results-msg { font-size: 1.1rem; color: var(--dark); margin-bottom: 28px; line-height: 1.5; }
+  .quiz-retry-btn { background: white; border: 2px solid var(--blue); color: var(--blue); padding: 12px 28px; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 0.85rem; transition: all 0.3s; margin-right: 12px; }
+  .quiz-retry-btn:hover { background: var(--blue); color: white; }
+  .quiz-next-phase { background: linear-gradient(135deg, var(--green), #15803d); color: white; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.85rem; display: inline-block; transition: all 0.3s; }
+  .quiz-next-phase:hover { opacity: 0.9; transform: translateY(-2px); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* FOOTER */
+  footer { position: relative; z-index: 1; text-align: center; padding: 60px 40px; background: var(--dark); color: white; }
+  .footer-logo { font-family: 'Poppins', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--yellow); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .footer-sub { color: var(--gray); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .footer-line { width: 80px; height: 2px; background: linear-gradient(90deg, var(--blue), var(--yellow), var(--green)); margin: 0 auto 20px; border-radius: 2px; }
+  .footer-copy { color: #475569; font-size: 0.72rem; }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .section-wrap { padding: 60px 24px; }
+    .content-grid { grid-template-columns: 1fr; }
+    .video-url-input { width: 200px; }
+    .quiz-container { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progressBar" class="progress-bar"></div>
+<div class="bg-grid"></div>
+<div class="bg-orbs">
+  <div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Sought After <span>Digitals</span></div>
+  <ul class="nav-links">
+    <li><a href="ghl-index.html">← All Phases</a></li>
+    <li><a href="#setup">Setup</a></li>
+    <li><a href="#navigation">Navigation</a></li>
+    <li><a href="#settings">Settings</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+  <span class="nav-phase-badge">Phase 01</span>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-phase-num">Phase 01 — Foundation</div>
+  <div class="hero-icon">🚀</div>
+  <h1 class="hero-title">GHL Setup &amp; <span class="accent">Navigation</span></h1>
+  <p class="hero-sub">Get your GoHighLevel account set up correctly from day one</p>
+  <div class="hero-jump">
+    <a href="#setup" class="jump-btn">Account Setup</a>
+    <a href="#navigation" class="jump-btn">Dashboard Tour</a>
+    <a href="#settings" class="jump-btn">Settings</a>
+    <a href="#domain" class="jump-btn">Domain & Email</a>
+    <a href="#quiz" class="jump-btn">📝 Take Quiz</a>
+  </div>
+  <div class="hero-divider"></div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- WHAT IS GHL -->
+<section id="setup">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 1 · Lesson 1</p>
+      <h2 class="section-title">What is <span class="accent">GoHighLevel?</span></h2>
+      <p class="section-desc">GoHighLevel (GHL) is an all-in-one marketing platform. Instead of using 10 different tools, GHL replaces them all in one place.</p>
+    </div>
+
+    <!-- VIDEO 1 -->
+    <div class="reveal" style="transition-delay:0.1s">
+      <p class="section-label" style="margin-bottom:16px;">📹 Training Videos</p>
+      <div class="video-grid">
+        <a href="https://youtu.be/4zMM5dO3uWg" target="_blank" class="video-card">
+          <div class="video-card-label">Video 1 — Watch First</div>
+          <div class="video-card-title">GoHighLevel Overview & Introduction</div>
+          <div class="video-card-url">youtu.be/4zMM5dO3uWg</div>
+          <div class="video-card-arrow">▶</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="content-grid reveal" style="transition-delay:0.15s">
+      <div class="content-card">
+        <div class="content-card-icon">🏢</div>
+        <div class="content-card-title">What GHL Replaces</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Email marketing (like Mailchimp)</li>
+            <li>CRM (like HubSpot)</li>
+            <li>Funnel builder (like ClickFunnels)</li>
+            <li>Scheduling (like Calendly)</li>
+            <li>SMS marketing tools</li>
+            <li>Reputation management tools</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-icon">🎯</div>
+        <div class="content-card-title">Who Uses GHL?</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Digital marketing agencies</li>
+            <li>Local businesses (dentists, gyms, etc.)</li>
+            <li>Real estate professionals</li>
+            <li>Coaches and consultants</li>
+            <li>E-commerce businesses</li>
+            <li>Online course creators</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-icon">💡</div>
+        <div class="content-card-title">Two Account Types</div>
+        <div class="content-card-body">
+          <ul>
+            <li><strong>Agency Account</strong> — Manages multiple clients (sub-accounts)</li>
+            <li><strong>Sub-Account</strong> — One specific business/client</li>
+            <li>As a team member, you typically work in sub-accounts</li>
+            <li>Each client gets their own sub-account</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box reveal">
+      <div class="tip-icon">💡</div>
+      <div class="tip-text"><strong>Pro Tip:</strong> Think of the Agency Account as the "parent" and Sub-Accounts as individual client "children." Always confirm which sub-account you're working in before making changes.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- DASHBOARD NAVIGATION -->
+<section id="navigation">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 1 · Lesson 2</p>
+      <h2 class="section-title">Dashboard <span class="accent">Navigation</span></h2>
+      <p class="section-desc">Learn to find your way around the GHL interface confidently. Here's a walkthrough of the main sections.</p>
+    </div>
+
+    <!-- VIDEO 2 -->
+    <div class="reveal" style="transition-delay:0.1s">
+      <p class="section-label" style="margin-bottom:16px;">📹 Training Videos</p>
+      <div class="video-grid">
+        <a href="https://youtu.be/VIDEO_ID_HERE_2" target="_blank" class="video-card">
+          <div class="video-card-label">Video 2 — Dashboard Walkthrough</div>
+          <div class="video-card-title">GHL Dashboard Walkthrough for Beginners</div>
+          <div class="video-card-url">youtu.be/VIDEO_ID_HERE_2</div>
+          <div class="video-card-arrow">▶</div>
+        </a>
+      </div>
+    </div>
+
+    <ul class="step-list reveal" style="transition-delay:0.15s">
+      <li class="step-item">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-content-title">Left Sidebar — Your Main Menu</div>
+          <div class="step-content-text">The left sidebar is your navigation hub. You'll find icons for Contacts, Conversations, Calendar, Marketing, Funnels, Sites, Automation, Reporting, and Settings. Hover over each icon to see its name.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-content-title">Dashboard Home</div>
+          <div class="step-content-text">The home dashboard shows your key metrics at a glance — new leads, appointments, open conversations, and revenue. This is your command center.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-content-title">Conversations Inbox</div>
+          <div class="step-content-text">All your SMS, email, Facebook DMs, and Instagram messages appear in one unified inbox. You can filter by channel, status, or assigned team member.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-content-title">Sub-Account Switcher</div>
+          <div class="step-content-text">At the top left, you can click the business name to switch between different client sub-accounts. Always double-check you're in the right account before making changes!</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">5</div>
+        <div>
+          <div class="step-content-title">Search Bar</div>
+          <div class="step-content-text">Use the search bar at the top to quickly find contacts, conversations, or specific features. It's the fastest way to navigate when you know what you're looking for.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SETTINGS -->
+<section id="settings">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 1 · Lesson 3</p>
+      <h2 class="section-title">Account <span class="accent">Settings</span></h2>
+      <p class="section-desc">Before using GHL for clients, you need to configure the basic settings correctly. These affect how everything else works.</p>
+    </div>
+
+    <div class="content-grid reveal" style="transition-delay:0.1s">
+      <div class="content-card">
+        <div class="content-card-icon">🏷️</div>
+        <div class="content-card-title">Business Information</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Business name and address</li>
+            <li>Phone number (for caller ID)</li>
+            <li>Business email address</li>
+            <li>Industry type</li>
+            <li>Time zone — very important for scheduling!</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-icon">🎨</div>
+        <div class="content-card-title">Branding</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Upload business logo</li>
+            <li>Set primary brand color</li>
+            <li>Customize the "from name" on emails</li>
+            <li>Add favicon for websites built in GHL</li>
+          </ul>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-icon">🔗</div>
+        <div class="content-card-title">Integrations</div>
+        <div class="content-card-body">
+          <ul>
+            <li>Connect Facebook & Instagram</li>
+            <li>Link Google My Business</li>
+            <li>Stripe for payment processing</li>
+            <li>Google Analytics & Pixel</li>
+            <li>Zapier or API connections</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="warn-box reveal">
+      <div class="warn-icon">⚠️</div>
+      <div class="warn-text"><strong>Important:</strong> Always set the correct time zone before creating any automations or appointment calendars. A wrong time zone means your messages go out at the wrong times!</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- DOMAIN & EMAIL -->
+<section id="domain">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 1 · Lesson 4</p>
+      <h2 class="section-title">Domain &amp; <span class="accent">Email Setup</span></h2>
+      <p class="section-desc">Connecting a custom domain and setting up email properly ensures your messages reach inboxes — not spam folders.</p>
+    </div>
+
+    <!-- VIDEO 3 -->
+    <div class="reveal" style="transition-delay:0.1s">
+      <p class="section-label" style="margin-bottom:16px;">📹 Training Videos</p>
+      <div class="video-grid">
+        <a href="https://youtu.be/VIDEO_ID_HERE_3" target="_blank" class="video-card">
+          <div class="video-card-label">Video 3 — Domain & Email Setup</div>
+          <div class="video-card-title">Connecting Your Domain & Email to GoHighLevel</div>
+          <div class="video-card-url">youtu.be/VIDEO_ID_HERE_3</div>
+          <div class="video-card-arrow">▶</div>
+        </a>
+      </div>
+    </div>
+
+    <ul class="step-list reveal" style="transition-delay:0.15s">
+      <li class="step-item">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-content-title">Adding a Custom Domain</div>
+          <div class="step-content-text">Go to Settings → Domains → Add Domain. Enter the domain (e.g., yoursite.com) and follow the DNS instructions. It can take 24–48 hours to fully activate.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-content-title">Setting Up Email (SMTP or LC Email)</div>
+          <div class="step-content-text">GHL has built-in LC Email or you can use a custom SMTP (like SendGrid, Mailgun). Go to Settings → Email Services. Using LC Email is the easiest option to start.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-content-title">Email Verification (DNS Records)</div>
+          <div class="step-content-text">Add SPF, DKIM, and DMARC records to your domain's DNS. These records prove to email providers that your emails are legitimate, drastically improving deliverability.</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-content-title">Test Your Setup</div>
+          <div class="step-content-text">After setup, send a test email to yourself. Check that it lands in the inbox (not spam), displays your correct "from" name, and all links work properly.</div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="tip-box reveal">
+      <div class="tip-icon">✉️</div>
+      <div class="tip-text"><strong>Deliverability Tip:</strong> Never skip setting up your SPF, DKIM, and DMARC records. Without them, your emails will likely end up in spam — making all your marketing efforts wasted.</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="section-wrap">
+    <div class="reveal">
+      <p class="section-label">Phase 1 · Knowledge Check</p>
+      <h2 class="section-title">Phase 1 <span class="accent">Quiz</span></h2>
+      <p class="section-desc">Test what you've learned about GoHighLevel setup and navigation. You need 70% or more to move on to Phase 2.</p>
+    </div>
+
+    <div class="quiz-container reveal" style="transition-delay:0.1s">
+      <div class="quiz-progress-bar-wrap">
+        <div class="quiz-progress-fill" id="quizProgress" style="width:0%"></div>
+      </div>
+      <div id="quizBody">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<footer>
+  <div class="footer-logo">Sought After Digitals</div>
+  <div class="footer-sub">Phase 1 — GHL Setup & Navigation</div>
+  <div class="footer-line"></div>
+  <div class="footer-copy">© 2025 Sought After Digitals. All rights reserved. | GoHighLevel Training</div>
+</footer>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    document.getElementById('progressBar').style.width = (scrollTop / docHeight * 100) + '%';
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  // QUIZ ENGINE
+  const questions = [
+    {
+      q: "What type of platform is GoHighLevel?",
+      options: ["A social media platform", "An all-in-one marketing and CRM platform", "A website hosting service only", "An email provider like Gmail"],
+      answer: 1,
+      explanation: "GoHighLevel is an all-in-one marketing platform that replaces tools like HubSpot, Mailchimp, ClickFunnels, and many more."
+    },
+    {
+      q: "What is the difference between an Agency Account and a Sub-Account?",
+      options: ["They are the same thing", "Agency Account manages multiple sub-accounts (clients)", "Sub-Account is for agencies only", "Sub-Accounts cost more money"],
+      answer: 1,
+      explanation: "The Agency Account is the parent account that can manage multiple Sub-Accounts. Each Sub-Account represents one client or business."
+    },
+    {
+      q: "Where do you find all your SMS, email, and social media messages in GHL?",
+      options: ["Under Settings > Notifications", "In the Conversations Inbox", "Under Contacts > Messages", "In the Marketing section"],
+      answer: 1,
+      explanation: "The Conversations Inbox is GHL's unified inbox where all messages (SMS, email, DMs) appear in one place."
+    },
+    {
+      q: "Why is setting the correct Time Zone important in GHL?",
+      options: ["It affects the color scheme", "It changes the language of the platform", "It determines when automated messages and appointments are scheduled", "It only matters for billing purposes"],
+      answer: 2,
+      explanation: "The time zone setting directly controls when automated messages are sent and when appointments are scheduled. Getting this wrong means messages go out at the wrong times!"
+    },
+    {
+      q: "What are SPF, DKIM, and DMARC records used for?",
+      options: ["Connecting social media accounts", "Improving email deliverability so emails don't go to spam", "Setting up payment processing", "Configuring the chatbot"],
+      answer: 1,
+      explanation: "SPF, DKIM, and DMARC are DNS records that verify your emails are legitimate, dramatically improving deliverability and keeping emails out of spam."
+    },
+    {
+      q: "Which of the following does GoHighLevel NOT replace?",
+      options: ["Email marketing tools", "CRM software", "Your computer's operating system", "Funnel building tools"],
+      answer: 2,
+      explanation: "GoHighLevel can't replace your computer's operating system! It replaces marketing and CRM tools like Mailchimp, HubSpot, ClickFunnels, Calendly, and more."
+    },
+    {
+      q: "Before making changes in GHL, what should you always check?",
+      options: ["Your internet speed", "That you are in the correct sub-account", "That your phone is charged", "The current date and time"],
+      answer: 1,
+      explanation: "Always double-check you're in the correct sub-account before making changes. Working in the wrong client's account can cause serious issues."
+    },
+  ];
+
+  let current = 0;
+  let score = 0;
+  let answered = false;
+
+  function renderQuestion() {
+    const q = questions[current];
+    const progress = ((current) / questions.length) * 100;
+    document.getElementById('quizProgress').style.width = progress + '%';
+
+    const letters = ['A', 'B', 'C', 'D'];
+    document.getElementById('quizBody').innerHTML = `
+      <div class="quiz-q-num">Question ${current + 1} of ${questions.length}</div>
+      <div class="quiz-question">${q.q}</div>
+      <div class="quiz-options">
+        ${q.options.map((opt, i) => `
+          <div class="quiz-option" onclick="selectOption(${i})" id="opt${i}">
+            <div class="quiz-option-letter">${letters[i]}</div>
+            ${opt}
+          </div>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="quizFeedback"></div>
+      <div class="quiz-nav">
+        <div class="quiz-score-display">Score: ${score}/${current}</div>
+        <button class="quiz-btn" id="nextBtn" onclick="nextQuestion()" disabled>Next →</button>
+      </div>
+    `;
+    answered = false;
+  }
+
+  function selectOption(idx) {
+    if (answered) return;
+    answered = true;
+    const q = questions[current];
+    const opts = document.querySelectorAll('.quiz-option');
+    const feedback = document.getElementById('quizFeedback');
+    opts[idx].classList.add('selected');
+
+    if (idx === q.answer) {
+      score++;
+      opts[idx].classList.add('correct');
+      feedback.textContent = '✅ Correct! ' + q.explanation;
+      feedback.className = 'quiz-feedback correct-fb show';
+    } else {
+      opts[idx].classList.add('wrong');
+      opts[q.answer].classList.add('correct');
+      feedback.textContent = '❌ Not quite. ' + q.explanation;
+      feedback.className = 'quiz-feedback wrong-fb show';
+    }
+    document.getElementById('nextBtn').disabled = false;
+  }
+
+  function nextQuestion() {
+    current++;
+    if (current < questions.length) {
+      renderQuestion();
+    } else {
+      showResults();
+    }
+  }
+
+  function showResults() {
+    document.getElementById('quizProgress').style.width = '100%';
+    const pct = Math.round((score / questions.length) * 100);
+    const passed = pct >= 70;
+    document.getElementById('quizBody').innerHTML = `
+      <div class="quiz-results">
+        <div class="quiz-results-score">${score}/${questions.length}</div>
+        <div class="quiz-results-label">${pct}% — ${passed ? '🏆 Passed!' : 'Keep Practicing'}</div>
+        <div class="quiz-results-msg">${passed
+          ? `Great work! You've mastered GHL Setup & Navigation. Ready for Phase 2 — Contacts & CRM!`
+          : `You got ${score} out of ${questions.length}. Review the material above and try again. You need 70% to pass.`
+        }</div>
+        <button class="quiz-retry-btn" onclick="retryQuiz()">↩ Retry Quiz</button>
+        ${passed ? `<a href="ghl-phase2.html" class="quiz-next-phase">Phase 2: CRM & Contacts →</a>` : ''}
+      </div>
+    `;
+  }
+
+  function retryQuiz() {
+    current = 0; score = 0; answered = false;
+    renderQuestion();
+  }
+
+  renderQuestion();
+</script>
+</body>
+</html>
